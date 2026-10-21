@@ -150,3 +150,44 @@ function buscarClienteCredito() {
         `;
     }
 }
+function calcularCredito() {
+    let cedula = recuperaraTexto("buscarCedulaCredito");
+    let cliente = buscarCliente(cedula);
+    let resultado = document.getElementById("resultadoCredito");
+
+    if (cliente === null) {
+        resultado.innerHTML = "Primero debe buscar un cliente registrado.";
+        return;
+    }
+
+    let monto = recuperarFloat("montoCredito");
+    let plazo = recuperarFloat("plazoCredito");
+
+    if (isNaN(monto) || monto <= 0) {
+        resultado.innerHTML = "Ingrese un monto válido.";
+        return;
+    }
+
+    if (isNaN(plazo) || plazo <= 0) {
+        resultado.innerHTML = "Ingrese un plazo válido en años.";
+        return;
+    }
+
+    let disponible = calcularDisponible(cliente.ingresos, cliente.egresos);
+    let capacidadPago = calcularCapacidadPago(disponible);
+    let interes = calcularInteresSimple(monto, tasaInteres, plazo);
+    let total = calcularTotalPagar(monto, interes);
+    let cuota = calcularCuotaMensual(total, plazo);
+
+    creditoAprobado = aprobarCredito(capacidadPago, cuota);
+
+    montoCalculado = monto;
+    plazoCalculado = plazo;
+    cuotaCalculada = cuota;
+
+    resultado.innerHTML =
+        "Capacidad de pago: $" + capacidadPago.toFixed(2) + "<br>" +
+        "Total a pagar: $" + total.toFixed(2) + "<br>" +
+        "Cuota mensual: $" + cuota.toFixed(2) + "<br>" +
+        "RESULTADO: " + (creditoAprobado ? "Aprobado" : "Rechazado");
+}
