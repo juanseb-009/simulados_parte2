@@ -157,6 +157,7 @@ function calcularCredito() {
 
     if (cliente === null) {
         resultado.innerHTML = "Primero debe buscar un cliente registrado.";
+        resultado.className = "";
         return;
     }
 
@@ -165,11 +166,13 @@ function calcularCredito() {
 
     if (isNaN(monto) || monto <= 0) {
         resultado.innerHTML = "Ingrese un monto válido.";
+        resultado.className = "";
         return;
     }
 
     if (isNaN(plazo) || plazo <= 0) {
         resultado.innerHTML = "Ingrese un plazo válido en años.";
+        resultado.className = "";
         return;
     }
 
@@ -189,5 +192,13 @@ function calcularCredito() {
         "Capacidad de pago: $" + capacidadPago.toFixed(2) + "<br>" +
         "Total a pagar: $" + total.toFixed(2) + "<br>" +
         "Cuota mensual: $" + cuota.toFixed(2) + "<br>" +
-        "RESULTADO: " + (creditoAprobado ? "Aprobado" : "Rechazado");
+        "<strong>RESULTADO: " +
+        (creditoAprobado ? "Aprobado" : "Rechazado") +
+        "</strong>";
+
+    if (creditoAprobado) {
+        resultado.className = "aprobado";
+    } else {
+        resultado.className = "rechazado";
+    }
 }
