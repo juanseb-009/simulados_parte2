@@ -131,3 +131,22 @@ function limpiar() {
 
     clienteSeleccionado = null;
 }
+
+function buscarClienteCredito() {
+    let cedula = recuperaraTexto("buscarCedulaCredito");
+    let cliente = buscarCliente(cedula);
+    let datosClienteCredito = document.getElementById("datosClienteCredito");
+
+    if (cliente === null) {
+        datosClienteCredito.innerHTML = "<p>Cliente no encontrado.</p>";
+    } else {
+        datosClienteCredito.innerHTML = `
+            <h3>Datos del Cliente</h3>
+            <p><strong>Cédula:</strong> ${cliente.cedula}</p>
+            <p><strong>Nombre:</strong> ${cliente.nombre}</p>
+            <p><strong>Apellido:</strong> ${cliente.apellido}</p>
+            <p><strong>Ingresos:</strong> ${cliente.ingresos}</p>
+            <p><strong>Egresos:</strong> ${cliente.egresos}</p>
+        `;
+    }
+}
