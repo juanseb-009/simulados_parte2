@@ -1,6 +1,7 @@
 let clientes = [];
 let creditos = [];
 
+
 let tasaInteres = 15;
 let clienteSeleccionado = null;
 let cuotaCalculada = 0;
@@ -51,6 +52,7 @@ function guardarCliente() {
     let apellido = recuperaraTexto("apellido");
     let ingresos = recuperarFloat("ingresos");
     let egresos = recuperarFloat("egresos");
+    let correo = recuperaraTexto("correo")
 
     let cliente = buscarCliente(cedula);
 
@@ -60,7 +62,8 @@ function guardarCliente() {
             nombre: nombre,
             apellido: apellido,
             ingresos: ingresos,
-            egresos: egresos
+            egresos: egresos,
+            correo : correo
         };
 
         clientes.push(cliente);
@@ -69,6 +72,8 @@ function guardarCliente() {
         cliente.apellido = apellido;
         cliente.ingresos = ingresos;
         cliente.egresos = egresos;
+        cliente.correo = correo;
+
     }
 
     clienteSeleccionado = null;
@@ -88,6 +93,7 @@ function pintarClientes() {
         contenido += "<td>" + clientes[i].apellido + "</td>";
         contenido += "<td>" + clientes[i].ingresos + "</td>";
         contenido += "<td>" + clientes[i].egresos + "</td>";
+        contenido += "<td>" + clientes[i].correo + "</td>";
         contenido += "<td><button onclick=\"seleccionarCliente('" + clientes[i].cedula + "')\">Actualizar</button></td>";
         contenido += "</tr>";
     }
@@ -118,6 +124,7 @@ function seleccionarCliente(cedula) {
         mostrarTextoEnCaja("apellido", cliente.apellido);
         mostrarTextoEnCaja("ingresos", cliente.ingresos);
         mostrarTextoEnCaja("egresos", cliente.egresos);
+        mostrarTextoEnCaja("correo",cliente.correo);
     }
 }
 
@@ -128,6 +135,7 @@ function limpiar() {
     mostrarTextoEnCaja("apellido", "");
     mostrarTextoEnCaja("ingresos", "");
     mostrarTextoEnCaja("egresos", "");
+    mostrarTextoEnCaja("correo", "")
 
     clienteSeleccionado = null;
 }
@@ -158,8 +166,12 @@ function calcularCredito() {
     if (cliente === null) {
         resultado.innerHTML = "Primero debe buscar un cliente registrado.";
         resultado.className = "";
+        document.getElementById("btnAsignarCredito").disabled = true;
         return;
     }
+
+    // Guardamos el cliente seleccionado
+    clienteSeleccionado = cliente;
 
     let monto = recuperarFloat("montoCredito");
     let plazo = recuperarFloat("plazoCredito");
@@ -167,12 +179,14 @@ function calcularCredito() {
     if (isNaN(monto) || monto <= 0) {
         resultado.innerHTML = "Ingrese un monto válido.";
         resultado.className = "";
+        document.getElementById("btnAsignarCredito").disabled = true;
         return;
     }
 
     if (isNaN(plazo) || plazo <= 0) {
         resultado.innerHTML = "Ingrese un plazo válido en años.";
         resultado.className = "";
+        document.getElementById("btnAsignarCredito").disabled = true;
         return;
     }
 
@@ -201,4 +215,44 @@ function calcularCredito() {
     } else {
         resultado.className = "rechazado";
     }
+
+    // ===== ESTA ES LA LÍNEA CLAVE =====
+    document.getElementById("btnAsignarCredito").disabled = !creditoAprobado;
+}
+function asignarCredito() {
+    console.log("Función asignarCredito ejecutada"); // para verificar en consola
+
+    if (!creditoAprobado) {
+        alert("El crédito no está aprobado.");
+        return;
+    }
+
+    if (clienteSeleccionado === null) {
+        alert("No hay un cliente seleccionado. Busca el cliente primero.");
+        return;
+    }
+
+    let credito = {
+        cedula: clienteSeleccionado.cedula,
+        nombre: clienteSeleccionado.nombre,
+        apellido: clienteSeleccionado.apellido,
+        monto: montoCalculado,
+        tasa: tasaInteres,
+        plazo: plazoCalculado,
+        cuota: cuotaCalculada
+    };
+
+    creditos.push(credito);
+
+    console.log("Crédito agregado:", credito);
+    console.log("Arreglo creditos completo:", creditos);
+
+    // Mensaje visual
+    let resultado = document.getElementById("resultadoCredito");
+    resultado.innerHTML += "<br><strong style='color: green;'>✓ Crédito asignado correctamente</strong>";
+
+    // Deshabilitar el botón después de asignar
+    document.getElementById("btnAsignarCredito").disabled = true;
+
+    alert("Crédito asignado correctamente");
 }
