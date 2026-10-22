@@ -256,3 +256,41 @@ function asignarCredito() {
 
     alert("Crédito asignado correctamente");
 }
+// PASO 4
+function buscarCreditos(cedula) {
+    let resultado = [];
+    for (let i = 0; i < creditos.length; i++) {
+        if (creditos[i].cedula === cedula) {
+            resultado.push(creditos[i]);
+        }
+    }
+    return resultado;
+}
+
+// PASO 5
+function pintarCreditos(listaCreditos) {
+    let contenido = "";
+    let tabla = document.getElementById("tablaCreditos");
+
+    for (let i = 0; i < listaCreditos.length; i++) {
+        let c = listaCreditos[i];
+        contenido += "<tr>";
+        contenido += "<td>" + c.cedula + "</td>";
+        contenido += "<td>" + c.nombre + "</td>";
+        contenido += "<td>" + c.apellido + "</td>";
+        contenido += "<td>$" + c.monto.toFixed(2) + "</td>";
+        contenido += "<td>" + c.tasa + "%</td>";
+        contenido += "<td>" + c.plazo + "</td>";
+        contenido += "<td>$" + c.cuota.toFixed(2) + "</td>";
+        contenido += "</tr>";
+    }
+
+    tabla.innerHTML = contenido;
+}
+
+// PASO 6
+function buscarCreditosCliente() {
+    let cedula = recuperaraTexto("buscarCedulaHistorial");
+    let creditosCliente = buscarCreditos(cedula);
+    pintarCreditos(creditosCliente);
+}

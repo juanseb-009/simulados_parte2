@@ -108,6 +108,32 @@
         Solicitar crédito
     </button>
     <button id="btnAsignarCredito" onclick="asignarCredito()" disabled>Asignar Credito</button>
+    <button onclick="mostrarSeccion('historial')">Creditos Registrados</button>
+</section>
+<section id="historial">
+    <h2>Créditos Registrados</h2>
+
+    <input type="text" id="buscarCedulaHistorial" placeholder="Cédula del cliente">
+    <button onclick="buscarCreditosCliente()">Buscar créditos del cliente</button>
+    <button onclick="pintarCreditos(creditos)">Mostrar todos los créditos</button>
+
+    <br><br>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cédula</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Monto</th>
+                <th>Tasa (%)</th>
+                <th>Plazo (años)</th>
+                <th>Cuota</th>
+            </tr>
+        </thead>
+        <tbody id="tablaCreditos">
+        </tbody>
+    </table>
 </section>
 
 <script src="utilitarios.js"></script>
